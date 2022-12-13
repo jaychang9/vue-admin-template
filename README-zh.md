@@ -96,6 +96,28 @@ npm run lint -- --fix
 
 ![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
 
+## Faq
+yarn run dev报以下错误
+```
+ERROR  Failed to compile with 9 errors                                                                                                                                                              下午2:37:37
+These dependencies were not found:
+
+* core-js/modules/es.array.push.js in ./node_modules/@babel/runtime/helpers/esm/regeneratorRuntime.js, ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Breadcrumb/index.vue?vue&type=script&lang=js& and 3 others
+* core-js/modules/es.error.cause.js in ./node_modules/@babel/runtime/helpers/esm/regeneratorRuntime.js, ./src/utils/request.js and 1 other
+* core-js/modules/es.object.proto.js in ./node_modules/@babel/runtime/helpers/esm/regeneratorRuntime.js
+
+To install them, you can run: npm install --save core-js/modules/es.array.push.js core-js/modules/es.error.cause.js core-js/modules/es.object.proto.js
+```
+
+出现这个问题的原因：因为vue-admin-template的package.json里没写这个包core-js，然后再咱们yarn装包的时候就没装这个包，所以运行时就会报错。
+
+所以可以通过以下命令安装core-js包
+```shell
+yarn add core-js
+```
+
+
+
 ## Browsers support
 
 Modern browsers and Internet Explorer 10+.
