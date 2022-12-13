@@ -43,6 +43,9 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
+      <p :class="flag ? 'font-small':'font-large' ">字体大小</p>
+      <el-button type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleChangeFontSize">Change FontSize</el-button>
+
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
@@ -53,6 +56,7 @@
 </template>
 
 <script>
+// 这里的@代表src目录,见vue.config.js的configureWebpack.resolve配置 '@': resolve('src')
 import { validUsername } from '@/utils/validate'
 
 export default {
@@ -83,6 +87,7 @@ export default {
       },
       loading: false,
       passwordType: 'password',
+      flag: false,
       redirect: undefined
     }
   },
@@ -120,6 +125,10 @@ export default {
           return false
         }
       })
+    },
+    handleChangeFontSize() {
+      this.flag = !this.flag
+      console.log(this)
     }
   }
 }
@@ -233,5 +242,14 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+}
+
+.font-small {
+ font-size: xx-small;
+}
+
+.font-large {
+  color: red($color: #000000);
+  font-size: xx-large;
 }
 </style>
