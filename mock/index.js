@@ -3,10 +3,13 @@ const { param2Obj } = require('./utils')
 
 const user = require('./user')
 const table = require('./table')
+const article = require('./article')
 
 const mocks = [
   ...user,
-  ...table
+  ...table,
+  // 若后端已完成接口，需要将mock接口移除，仅需要注释掉就可以了
+  ...article
 ]
 
 // for front mock
