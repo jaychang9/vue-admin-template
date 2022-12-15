@@ -15,6 +15,7 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 // port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 9528 // dev port
 const baseUrl = process.env.VUE_APP_BASE_API
+console.log('baseUrl = ' + baseUrl)
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   /**
@@ -31,7 +32,7 @@ module.exports = {
   // eslint-loader 是否在保存的时候检查
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
-  // 以下使用mock-server
+  // 以下配置为使用mock-server
   // devServer: {
   //   port: port,
   //   open: true,
@@ -46,7 +47,13 @@ module.exports = {
     proxy: {
       '/api': {
         target: baseUrl,
-        pathRewrite: { '^/api': '' }
+        ws: true,
+        // 控制请求头中的host
+        changeOrigin: true,
+        // 将代理前缀名去掉
+        pathRewrite: {
+          '^/api': '/'
+        }
       }
     }
   },

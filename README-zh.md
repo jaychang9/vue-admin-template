@@ -97,7 +97,7 @@ npm run lint -- --fix
 ![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
 
 ## Faq
-yarn run dev报以下错误
+### yarn run dev报缺core-js的错误
 ```
 ERROR  Failed to compile with 9 errors                                                                                                                                                              下午2:37:37
 These dependencies were not found:
@@ -116,6 +116,12 @@ To install them, you can run: npm install --save core-js/modules/es.array.push.j
 yarn add core-js
 ```
 
+### vue.config.js proxy不生效的问题
+
+将request.js的这一行代码注释掉即可
+```js
+// baseURL: process.env.VUE_APP_BASE_API
+```
 
 
 ## Browsers support
