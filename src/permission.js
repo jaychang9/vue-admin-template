@@ -31,13 +31,14 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else {
         try {
+          console.log('permission.js await sysUser/getInfo')
           // get user info
-          await store.dispatch('user/getInfo')
+          await store.dispatch('sysUser/getInfo')
 
           next()
         } catch (error) {
           // remove token and go to login page to re-login
-          await store.dispatch('user/resetToken')
+          await store.dispatch('sysUser/resetToken')
           Message.error(error || 'Has Error')
           next(`/login?redirect=${to.path}`)
           NProgress.done()

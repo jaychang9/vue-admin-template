@@ -9,14 +9,11 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
-//   return request({
-//     url: '/vue-admin-template/user/info',
-//     method: 'get',
-//     params: { token }
-//   })
-// TODO
-  return {}
+export function getInfo() {
+  return request({
+    url: '/api/mall-admin-web/sys_user/me',
+    method: 'get'
+  })
 }
 
 export function logout() {

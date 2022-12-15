@@ -123,6 +123,9 @@ yarn add core-js
 // baseURL: process.env.VUE_APP_BASE_API
 ```
 
+### debug
+只需打开package.json,点击Debug即可
+
 
 ## Browsers support
 
