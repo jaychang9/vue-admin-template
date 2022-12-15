@@ -17,7 +17,6 @@ export function getInfo() {
 }
 
 export function logout() {
-  console.log('invoke sysUser api logout')
   return request({
     url: '/api/meeleet-auth/oauth/logout',
     method: 'post'
