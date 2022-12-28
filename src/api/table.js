@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export function getList() {
   return request({
     url: '/api/mall-admin-web/table/list',
@@ -8,11 +7,11 @@ export function getList() {
   })
 }
 
-export function getPage(listQuery) {
-  const {page,limit} = listQuery
+export function getPage(pageParam) {
+  const { page, limit } = pageParam
   return request({
     url: '/api/mall-admin-web/table/page',
     method: 'get',
-    params: {'current':page,'size':limit}
+    params: { 'current': page, 'size': limit }
   })
 }

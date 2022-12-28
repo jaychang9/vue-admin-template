@@ -42,18 +42,18 @@
     </el-table>
 
     <pagination
-    v-show="total>0"
-    :total="total"
-    :page.sync="listQuery.page"
-    :limit.sync="listQuery.limit"
-    @pagination="fetchData" />
+      v-show="total>0"
+      :total="total"
+      :page.sync="pageParam.page"
+      :limit.sync="pageParam.limit"
+      @pagination="fetchData"
+    />
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination'
 import { getPage } from '@/api/table'
-
 
 export default {
   components: { Pagination },
@@ -70,9 +70,9 @@ export default {
   data() {
     return {
       total: 0,
-      listQuery:{
+      pageParam: {
         page: 1,
-        limit : 20
+        limit: 20
       },
       list: null,
       listLoading: true
@@ -84,7 +84,7 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getPage(this.listQuery).then(response => {
+      getPage(this.pageParam).then(response => {
         this.total = response.data.total
         this.list = response.data.records
         // Just to simulate the time of the request
