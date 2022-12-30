@@ -42,7 +42,7 @@
     </el-table>
 
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="pageParam.page"
       :limit.sync="pageParam.limit"
@@ -56,6 +56,7 @@ import Pagination from '@/components/Pagination'
 import { getPage } from '@/api/table'
 
 export default {
+  name: 'Table',
   components: { Pagination },
   filters: {
     statusFilter(status) {
