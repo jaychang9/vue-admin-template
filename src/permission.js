@@ -1,8 +1,6 @@
 import router from '@/router'
 import store from '@/store'
-import {
-  Message
-} from 'element-ui'
+import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 // import { getToken } from '@/utils/auth' // get token from cookie
@@ -14,7 +12,7 @@ NProgress.configure({
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
 
@@ -52,11 +50,11 @@ router.beforeEach(async (to, from, next) => {
       try {
         console.log('permission.js await sysUser/getInfo')
         // get user info
-        await store.dispatch('sys/sysUser/getInfo')
+        await store.dispatch('sysUser/getInfo')
         next()
       } catch (error) {
         // remove token and go to login page to re-login
-        await store.dispatch('sys/sysUser/resetToken')
+        await store.dispatch('sysUser/resetToken')
         Message.error(error || 'Has Error')
         next(`/login?redirect=${to.path}`)
         NProgress.done()
