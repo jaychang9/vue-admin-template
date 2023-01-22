@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function listRoutes() {
   return request({
-    url: '/mall-admin-web/sys_menu/routes',
+    url: '/api/mall-admin-web/sys_menu/routes',
     method: 'get'
   })
 }

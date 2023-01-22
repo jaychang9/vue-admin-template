@@ -1,4 +1,4 @@
-import { constantRoutes} from '@/router'
+import { constantRoutes } from '@/router'
 import { listRoutes } from '@/api/sys/sysMenu'
 
 /**
@@ -10,6 +10,7 @@ function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role))
   } else {
+    // route.meta为null或 route.meta.roles为null,说明访问该路由无需检查角色,所以返回true就可以了
     return true
   }
 }
@@ -19,14 +20,14 @@ function hasPermission(roles, route) {
  * @param routes asyncRoutes
  * @param roles
  */
-export function filterAsyncRoutes(routes, roles) {
+export function filterDynamicRoutes(routes, roles) {
   const res = []
 
   routes.forEach(route => {
-    const tmp = {...route}
+    const tmp = { ...route }
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRoutes(tmp.children, roles)
+        tmp.children = filterDynamicRoutes(tmp.children, roles)
       }
       res.push(tmp)
     }
@@ -48,9 +49,9 @@ const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise((resolve, reject) => {
       listRoutes().then((response) => {
-        const asyncRoutes = response.data
-        const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-        this.setRoutes(accessedRoutes)
+        const dynamicRoutes = response.data
+        const accessedRoutes = filterDynamicRoutes(dynamicRoutes, roles)
+        commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch((error) => {
         reject(error)
