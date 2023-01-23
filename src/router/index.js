@@ -38,7 +38,11 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
+  {
+    path: '/404',
+    component: () => import('@/views/error-page/404'),
+    hidden: true
+  },
   {
     path: '/401',
     component: () => import('@/views/error-page/401'),
@@ -173,10 +177,22 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
+// 重写addRoutes
+Router.prototype.addRoutes = function(newRoutes) {
+  router.matcher = createRouter().matcher // 通过重置matcher来重置router
+  // addRoutes.call(this, newRoutes) // 调用原有方法
+  router.options.staticRoutes = router.options.routes
+  router.options.dynamicRoutes = newRoutes
+  router.options.routes = [...router.options.routes, ...newRoutes]
+}
+
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
+  if (router.options.dynamicRoutes && router.options.dynamicRoutes.length > 0) {
+    router.options.routes = router.options.staticRoutes
+  }
 }
 
 export default router

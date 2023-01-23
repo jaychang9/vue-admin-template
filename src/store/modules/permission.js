@@ -1,5 +1,6 @@
 import { constantRoutes } from '@/router'
 import { listRoutes } from '@/api/sys/sysMenu'
+import Layout from '@/layout'
 
 /**
  * Use meta.role to determine if the current user has permission
@@ -21,18 +22,32 @@ function hasPermission(roles, route) {
  * @param roles
  */
 export function filterDynamicRoutes(routes, roles) {
+  console.log('filterDynamicRoutes start')
   const res = []
-
+  // 遍历路由数组去重组可用的路由
   routes.forEach(route => {
     const tmp = { ...route }
+    // 如果有有权限
     if (hasPermission(roles, tmp)) {
+      if (tmp.component) {
+        // 判断 item.component 是否等于 'Layout',若是则直接替换成引入的 Layout 组件
+        if (tmp.component === 'Layout') {
+          tmp.component = Layout
+        } else {
+          //  tmp.component 不等于 'Layout',则说明它是组件路径地址，因此直接替换成路由引入的方法
+          // tmp.component = resolve => require([`@/views/${tmp.component}`], resolve)
+          // 此处用reqiure比较好，import引入变量会有各种莫名的错误
+          tmp.component = () => import('@/views/system/dict/index')
+        }
+      }
       if (tmp.children) {
         tmp.children = filterDynamicRoutes(tmp.children, roles)
       }
       res.push(tmp)
     }
   })
-
+  console.log('filterDynamicRoutes end')
+  console.log(res)
   return res
 }
 
@@ -51,6 +66,8 @@ const actions = {
       listRoutes().then((response) => {
         const dynamicRoutes = response.data
         const accessedRoutes = filterDynamicRoutes(dynamicRoutes, roles)
+        console.log('accessedRoutes')
+        console.log(accessedRoutes)
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch((error) => {
