@@ -10,6 +10,8 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
+const route404 = { path: '*', redirect: '/404', hidden: true }
+
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -39,18 +41,19 @@ router.beforeEach(async(to, from, next) => {
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
 
-          console.log(accessRoutes)
-
+          const routes = [...accessRoutes, route404]
+          console.log('routes', routes)
           // dynamically add accessible routes
-          router.addRoutes(accessRoutes)
+          router.addRoutes(routes)
 
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
         } catch (error) {
+          console.log('permission.js catch error', error)
           // remove token and go to login page to re-login
           await store.dispatch('sysUser/resetToken')
-          Message.error(error || 'Has Error')
+          Message.error(error || '出现错误，请稍后再试')
           next(`/login?redirect=${to.path}`)
           NProgress.done()
         }

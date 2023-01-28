@@ -83,6 +83,19 @@ export const constantRoutes = [
   },
 
   // {
+  //   path: '/system',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'user',
+  //       name: 'User',
+  //       component: resolve => require([`@/views/system/user/index`], resolve),
+  //       meta: { title: '用户管理', icon: 'user' }
+  //     }
+  //   ]
+  // },
+
+  // {
   //   path: '/form',
   //   component: Layout,
   //   children: [
@@ -164,10 +177,10 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
 ]
+
+// 404 page must be placed at the end !!!
+const route404 = { path: '*', redirect: '/404', hidden: true }
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
@@ -178,21 +191,25 @@ const createRouter = () => new Router({
 const router = createRouter()
 
 // 重写addRoutes
-Router.prototype.addRoutes = function(newRoutes) {
-  router.matcher = createRouter().matcher // 通过重置matcher来重置router
-  // addRoutes.call(this, newRoutes) // 调用原有方法
-  router.options.staticRoutes = router.options.routes
-  router.options.dynamicRoutes = newRoutes
-  router.options.routes = [...router.options.routes, ...newRoutes]
-}
+// Router.prototype.addRoutes = function(newRoutes) {
+//   router.matcher = createRouter().matcher // 通过重置matcher来重置router
+//   router.options.staticRoutes = router.options.staticRoutes ? router.options.staticRoutes : router.options.routes
+//   if (newRoutes && newRoutes.length > 0) {
+//     router.options.dynamicRoutes = newRoutes
+//     router.options.routes = [...router.options.staticRoutes, ...newRoutes, route404]
+//   } else {
+//     router.options.routes = [...router.options.staticRoutes, route404]
+//   }
+//   console.log('addRoutes\n')
+//   console.log(router.options.routes)
+// }
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
-  if (router.options.dynamicRoutes && router.options.dynamicRoutes.length > 0) {
-    router.options.routes = router.options.staticRoutes
-  }
+  // router.options.routes = [...router.options.staticRoutes, route404]
+  console.log('resetRoute \n' + router.options.routes)
 }
 
 export default router
