@@ -10,8 +10,6 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-const route404 = { path: '*', redirect: '/404', hidden: true }
-
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -40,12 +38,11 @@ router.beforeEach(async(to, from, next) => {
 
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
-          const routes = [...accessRoutes, route404]
-          console.log('routes', routes)
+          console.log('accessRoutes', accessRoutes)
           // dynamically add accessible routes
-          router.addRoutes(routes)
-
+          router.addRoutes(accessRoutes)
+          // 用于菜单显示
+          router.options.routes = accessRoutes
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
