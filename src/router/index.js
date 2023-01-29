@@ -190,6 +190,7 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
+// vue-router 3.6.5 addRoutes已经是过时方法了
 // 重写addRoutes
 // Router.prototype.addRoutes = function(newRoutes) {
 //   router.matcher = createRouter().matcher // 通过重置matcher来重置router
@@ -204,7 +205,7 @@ const router = createRouter()
 //   console.log(router.options.routes)
 // }
 
-// 解决Vue-Router升级导致的Uncaught(in promise) navigation guard问题
+// 解决Vue-Router升级导致的Uncaught(in promise) navigation guard问题 https://www.jianshu.com/p/4fe55ae9a4b3
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject) { return originalPush.call(this, location, onResolve, onReject) }
