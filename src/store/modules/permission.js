@@ -71,12 +71,13 @@ const actions = {
       listRoutes().then((response) => {
         const dynamicRoutes = response.data
         let accessedRoutes
+        // 超级管理员角色ROOT 拥有所有菜单权限
         if (roles.includes('ROOT')) {
           accessedRoutes = dynamicRoutes || []
         } else {
           accessedRoutes = filterAsyncRoutes(dynamicRoutes, roles)
         }
-        accessedRoutes = accessedRoutes.concat({ path: '*', redirect: '/404', hidden: true })
+        // accessedRoutes = accessedRoutes.concat({ path: '*', redirect: '/404', hidden: true })
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch((error) => {
