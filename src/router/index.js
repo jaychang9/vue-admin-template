@@ -80,7 +80,7 @@ export const constantRoutes = [
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
-  },
+  }
 
   // {
   //   path: '/system',
