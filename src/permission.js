@@ -38,11 +38,17 @@ router.beforeEach(async(to, from, next) => {
 
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
+
           console.log('accessRoutes', accessRoutes)
           // dynamically add accessible routes
-          router.addRoutes(accessRoutes)
-          // 用于菜单显示
-          router.options.routes = accessRoutes
+          // router.addRoutes(accessRoutes)
+          if (accessRoutes && accessRoutes.length > 0) {
+            // 用于菜单显示
+            router.options.routes = accessRoutes
+            accessRoutes.forEach(accessRoute => {
+              router.addRoute(accessRoute)
+            })
+          }
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
