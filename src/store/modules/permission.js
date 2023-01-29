@@ -39,20 +39,13 @@ export function filterAsyncRoutes(routes, roles) {
         } else {
           console.log('创建动态路由' + tmp.component)
           //  tmp.component 不等于 'Layout',则说明它是组件路径地址，因此直接替换成路由引入的方法
-          // tmp.component = () => import(`@/views/${tmp.component}`)
           // 此处用reqiure比较好，import引入变量会有各种莫名的错误
-          const tmpComponent = `@/views/${tmp.component}`
-          console.log('tmpComponent', tmpComponent)
-          // tmp.component = resolve => require([tmpComponent], resolve)
-          // tmp.component = () => import(tmpComponent)
-          tmp.component = (resolve) => require([`@/views/${tmpComponent}.vue`], resolve)
+          const componentStr = `views/${tmp.component}`
+          tmp.component = (resolve) => require([`@/${componentStr}.vue`], resolve)
         }
       }
       if (tmp.children && tmp.children.length > 0) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
-      } else {
-        delete tmp['children']
-        delete tmp['redirect']
       }
       res.push(tmp)
     }
