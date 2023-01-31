@@ -1,4 +1,4 @@
-import { constantRoutes } from '@/router'
+import { constantRoutes, resetRouter, route404 } from '@/router'
 import { listRoutes } from '@/api/sys/sysMenu'
 import Layout from '@/layout'
 
@@ -77,7 +77,9 @@ const actions = {
         } else {
           accessedRoutes = filterAsyncRoutes(dynamicRoutes, roles)
         }
-        // accessedRoutes = accessedRoutes.concat({ path: '*', redirect: '/404', hidden: true })
+        // 404重定向要放最后
+        accessedRoutes = constantRoutes.concat(accessedRoutes).concat(route404)
+        resetRouter()
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch((error) => {

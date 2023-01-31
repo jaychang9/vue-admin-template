@@ -55,7 +55,7 @@ service.interceptors.response.use(
       })
 
       // A0230: token无效或已过期; A0231:token已被禁止访问
-      if (res.code === 'A0230' || res.code === 'A0231') {
+      if (res.status === 401 || res.code === 'A0230' || res.code === 'A0231') {
         // to re-login
         MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
           confirmButtonText: 'Re-Login',

@@ -32,6 +32,8 @@ import Layout from '@/layout'
  */
 // 参数说明: https://panjiachen.gitee.io/vue-element-admin-site/zh/guide/essentials/router-and-nav.html
 // 静态路由
+export const route404 = { path: '*', redirect: '/404', hidden: true }
+
 export const constantRoutes = [
   {
     path: '/login',
@@ -177,6 +179,9 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
+
+  // 404 page must be placed at the end !!!
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 // 404 page must be placed at the end !!!
@@ -185,7 +190,7 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRoutes.concat(route404)
 })
 
 const router = createRouter()
@@ -216,8 +221,9 @@ Router.prototype.push = function push(location, onResolve, onReject) {
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
-  // router.options.routes = [...router.options.staticRoutes, route404]
-  console.log('resetRoute \n' + router.options.routes)
 }
+
+router.staticRoutes = constantRoutes
+router.route404 = route404
 
 export default router
