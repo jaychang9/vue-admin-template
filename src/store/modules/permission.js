@@ -1,4 +1,4 @@
-import { constantRoutes, resetRouter, route404 } from '@/router'
+import { constantRoutes, route404 } from '@/router'
 import { listRoutes } from '@/api/sys/sysMenu'
 import Layout from '@/layout'
 
@@ -61,7 +61,7 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     // ['a','b'].concat([]) => ['a','b']
-    state.routes = constantRoutes.concat(routes)
+    state.routes = constantRoutes.concat(routes).concat(route404)
   }
 }
 
@@ -69,6 +69,7 @@ const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise((resolve, reject) => {
       listRoutes().then((response) => {
+        // 后端返回的登录用户可访问的路由列表,即动态路由
         const dynamicRoutes = response.data
         let accessedRoutes
         // 超级管理员角色ROOT 拥有所有菜单权限
@@ -77,10 +78,11 @@ const actions = {
         } else {
           accessedRoutes = filterAsyncRoutes(dynamicRoutes, roles)
         }
-        // 404重定向要放最后
-        accessedRoutes = constantRoutes.concat(accessedRoutes).concat(route404)
-        resetRouter()
+        console.log('generateRoutes', accessedRoutes)
+        // commit('SET_ROUTES')时accessedRoutes不能带静态路由信息
         commit('SET_ROUTES', accessedRoutes)
+        // 带上静态路由信息
+        // accessedRoutes = constantRoutes.concat(accessedRoutes).concat(route404)
         resolve(accessedRoutes)
       }).catch((error) => {
         reject(error)

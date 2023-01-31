@@ -85,19 +85,6 @@ export const constantRoutes = [
   }
 
   // {
-  //   path: '/system',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'user',
-  //       name: 'User',
-  //       component: resolve => require([`@/views/system/user/index`], resolve),
-  //       meta: { title: '用户管理', icon: 'user' }
-  //     }
-  //   ]
-  // },
-
-  // {
   //   path: '/form',
   //   component: Layout,
   //   children: [
@@ -184,31 +171,14 @@ export const constantRoutes = [
   // { path: '*', redirect: '/404', hidden: true }
 ]
 
-// 404 page must be placed at the end !!!
-// const route404 = { path: '*', redirect: '/404', hidden: true }
-
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
+  // 404 page must be placed at the end !!!
   routes: constantRoutes.concat(route404)
 })
 
 const router = createRouter()
-
-// vue-router 3.6.5 addRoutes已经是过时方法了
-// 重写addRoutes
-// Router.prototype.addRoutes = function(newRoutes) {
-//   router.matcher = createRouter().matcher // 通过重置matcher来重置router
-//   router.options.staticRoutes = router.options.staticRoutes ? router.options.staticRoutes : router.options.routes
-//   if (newRoutes && newRoutes.length > 0) {
-//     router.options.dynamicRoutes = newRoutes
-//     router.options.routes = [...router.options.staticRoutes, ...newRoutes, route404]
-//   } else {
-//     router.options.routes = [...router.options.staticRoutes, route404]
-//   }
-//   console.log('addRoutes\n')
-//   console.log(router.options.routes)
-// }
 
 // 解决Vue-Router升级导致的Uncaught(in promise) navigation guard问题 https://www.jianshu.com/p/4fe55ae9a4b3
 const originalPush = Router.prototype.push
@@ -222,8 +192,5 @@ export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }
-
-router.staticRoutes = constantRoutes
-router.route404 = route404
 
 export default router
