@@ -50,8 +50,7 @@ export function filterAsyncRoutes(routes, roles) {
       res.push(tmp)
     }
   })
-  console.log('filterAsyncRoutes end')
-  console.log(res)
+  console.log('filterAsyncRoutes end', res)
   return res
 }
 
@@ -81,8 +80,6 @@ const actions = {
         console.log('generateRoutes', accessedRoutes)
         // commit('SET_ROUTES')时accessedRoutes不能带静态路由信息
         commit('SET_ROUTES', accessedRoutes)
-        // 带上静态路由信息
-        // accessedRoutes = constantRoutes.concat(accessedRoutes).concat(error404)
         resolve(accessedRoutes)
       }).catch((error) => {
         reject(error)
