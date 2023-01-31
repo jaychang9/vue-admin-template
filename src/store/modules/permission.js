@@ -1,4 +1,4 @@
-import { constantRoutes, route404 } from '@/router'
+import { constantRoutes, error404 } from '@/router'
 import { listRoutes } from '@/api/sys/sysMenu'
 import Layout from '@/layout'
 
@@ -61,7 +61,7 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     // ['a','b'].concat([]) => ['a','b']
-    state.routes = constantRoutes.concat(routes).concat(route404)
+    state.routes = constantRoutes.concat(routes).concat(error404)
   }
 }
 
@@ -82,7 +82,7 @@ const actions = {
         // commit('SET_ROUTES')时accessedRoutes不能带静态路由信息
         commit('SET_ROUTES', accessedRoutes)
         // 带上静态路由信息
-        // accessedRoutes = constantRoutes.concat(accessedRoutes).concat(route404)
+        // accessedRoutes = constantRoutes.concat(accessedRoutes).concat(error404)
         resolve(accessedRoutes)
       }).catch((error) => {
         reject(error)

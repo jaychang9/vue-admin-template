@@ -4,7 +4,7 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
-import router, { constantRoutes, route404, resetRouter } from '@/router'
+import router, { constantRoutes, error404} from '@/router'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -40,16 +40,12 @@ router.beforeEach(async(to, from, next) => {
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
           console.log('router.beforeEach accessRoutes', accessRoutes)
           // dynamically add accessible routes
-          // router.addRoutes(accessRoutes)
-          if (constantRoutes && constantRoutes.length > 0) {
-            constantRoutes.forEach(constantRoute => router.addRoute(constantRoute))
-          }
           if (accessRoutes && accessRoutes.length > 0) {
             accessRoutes.forEach(accessRoute => router.addRoute(accessRoute))
           }
-          router.addRoute(route404)
+          router.addRoute(error404)
           // 用于菜单显示
-          router.options.routes = [...constantRoutes, ...accessRoutes, route404]
+          router.options.routes = [...constantRoutes, ...accessRoutes, error404]
           // hack method to ensure that addRoutes is complete
           // set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
