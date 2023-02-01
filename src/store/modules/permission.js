@@ -18,6 +18,17 @@ function hasPermission(roles, route) {
 }
 
 /**
+ *
+ * @param {*} viewComponentPah
+ * @returns
+ */
+const loadView = (viewComponentPah) => {
+  console.log('loadView', process.env.NODE_ENV)
+  // return () => import(`@/${viewComponentPah}.vue`)
+  return (resolve) => require([`@/${viewComponentPah}.vue`], resolve)
+}
+
+/**
  * Filter asynchronous routing tables by recursion
  * @param routes asyncRoutes
  * @param roles
@@ -30,7 +41,7 @@ export function filterAsyncRoutes(routes, roles) {
     // route如果为undefined，那么tmp = { ...route } 相当于 tmp = {}
     const tmp = { ...route }
     console.log('tmp', tmp)
-    // 如果有有权限
+    // 如果有权限
     if (hasPermission(roles, tmp)) {
       if (tmp.component) {
         // 判断 item.component 是否等于 'Layout',若是则直接替换成引入的 Layout 组件
@@ -41,7 +52,8 @@ export function filterAsyncRoutes(routes, roles) {
           //  tmp.component 不等于 'Layout',则说明它是组件路径地址，因此直接替换成路由引入的方法
           // 此处用reqiure比较好，import引入变量会有各种莫名的错误
           const componentStr = `views/${tmp.component}`
-          tmp.component = (resolve) => require([`@/${componentStr}.vue`], resolve)
+          // tmp.component = (resolve) => require([`@/${componentStr}.vue`], resolve)
+          tmp.component = loadView(componentStr)
         }
       }
       if (tmp.children && tmp.children.length > 0) {
@@ -60,7 +72,7 @@ const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
     // ['a','b'].concat([]) => ['a','b']
-    state.routes = constantRoutes.concat(routes).concat(error404)
+    state.routes = constantRoutes.concat(routes)
   }
 }
 
@@ -77,8 +89,8 @@ const actions = {
         } else {
           accessedRoutes = filterAsyncRoutes(dynamicRoutes, roles)
         }
+        accessedRoutes = accessedRoutes.concat(error404)
         console.log('generateRoutes', accessedRoutes)
-        // commit('SET_ROUTES')时accessedRoutes不能带静态路由信息
         commit('SET_ROUTES', accessedRoutes)
         resolve(accessedRoutes)
       }).catch((error) => {

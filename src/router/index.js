@@ -75,13 +75,13 @@ export const constantRoutes = [
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: 'Table', icon: 'table', affix: true }
       },
       {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: 'Tree', icon: 'tree', affix: true }
       }
     ]
   }
@@ -171,7 +171,8 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  // 去掉url中的#
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   // 404 page must be placed at the end !!!
   routes: constantRoutes.concat(error404)
@@ -180,6 +181,7 @@ const createRouter = () => new Router({
 const router = createRouter()
 
 // 解决Vue-Router升级导致的Uncaught(in promise) navigation guard问题 https://www.jianshu.com/p/4fe55ae9a4b3
+// 防止连续点击多次路由报错
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject) { return originalPush.call(this, location, onResolve, onReject) }
